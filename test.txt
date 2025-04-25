@@ -1,0 +1,15 @@
+1
+#Here is the number of lines required: 34
+##start
+room1 2 5
+room2 3 5
+room3 3 5
+room4 5 5
+##end
+room5 5 5
+
+room1-room2
+room2-room3
+room3-room1
+room4-room5
+room3-room4
