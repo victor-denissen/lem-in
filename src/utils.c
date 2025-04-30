@@ -1,6 +1,6 @@
-#include "../inc/map_node.h"
-#include "../ft_printf/inc/ft_printf.h"
 #include "../inc/free.h"
+#include "../ft_printf/inc/ft_printf.h"
+#include "../inc/master.h"
 
 void    print_ant_info(t_game_info * info)
 {
@@ -190,7 +190,28 @@ t_map_node * find_room_ll(t_list * node, char * name)
     return NULL;
 }
 
-t_map_node * get_end(t_list * rooms)
+t_map_node * get_end(t_map_node ** rooms, int max)
+{
+    for (int i = 0; i < max; ++i)
+    {
+        t_map_node * room = rooms[i];
+        if (room->end)
+            return room;
+    }
+    return NULL;
+}
+
+t_map_node * get_start(t_map_node ** rooms, int max)
+{
+    for (int i = 0; i < max; ++i)
+    {
+        t_map_node * room = rooms[i];
+        if (room->start)
+            return room;
+    }
+    return NULL;
+}
+t_map_node * get_end_ll(t_list * rooms)
 {
     while (rooms)
     {
@@ -200,4 +221,38 @@ t_map_node * get_end(t_list * rooms)
         rooms = rooms->next;
     }
     return NULL;
+}
+
+t_map_node * get_start_ll(t_list * rooms)
+{
+    while (rooms)
+    {
+        t_map_node * room = rooms->content;
+        if (room->start)
+            return room;
+        rooms = rooms->next;
+    }
+    return NULL;
+}
+
+void    print_path(t_path * path_src)
+{
+    t_list * path = path_src->path;
+    for (int j = 0; path; path = path->next, j++)
+    {
+        t_map_node * room = path->content;
+        ft_printf("room %i: %s\n", j, room->name);
+    }
+
+}
+
+void    print_all_paths(t_list * paths)
+{
+    for (int i = 0;paths; paths = paths->next, i++)
+    {
+        ft_putendl_fd("------------------", 1);
+        ft_printf("path %i\n\n", i);
+        t_path * cont = paths->content;
+        print_path(cont);
+    }
 }

@@ -1,8 +1,8 @@
 #include "../inc/map_node.h"
-#include "../inc/utils.h"
 #include "../inc/contructors.h"
 #include "../ft_printf/libft/header/libft.h"
 #include "../get_next_line//get_next_line.h"
+#include "../ft_printf/inc/ft_printf.h"
 /* #include "../inc/utils.h" */
 #include <stdlib.h>
 #include <fcntl.h>
@@ -192,7 +192,7 @@ t_game_info * read_and_parse_file(char * file)
 {
     int fd = open(file, O_RDONLY);
     if (fd == -1)
-        return NULL;
+        return ft_printf("Could not open %s\n", file), NULL;
 
     t_game_info * info = game_info_con();
     if (!info)

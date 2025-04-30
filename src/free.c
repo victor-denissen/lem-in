@@ -1,4 +1,5 @@
 #include "../inc/map_node.h"
+#include "../inc/master.h"
 #include "../ft_printf/libft/header/libft.h"
 
 void    free_map_node(void * room_src)
@@ -41,4 +42,11 @@ void    free_game_info(t_game_info * info)
     ft_lstclear(&info->tmp_room_storage, &free_map_node);
 
     free(info);
+}
+
+void    free_path(void * path_src)
+{
+    t_path * to_free = path_src;
+    ft_lstclear(&to_free->path, NULL);
+    free(to_free);
 }

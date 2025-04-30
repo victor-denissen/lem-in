@@ -40,6 +40,8 @@ t_map_node *    map_node_con(char * str)
     new->end = false;
     new->start = false;
     new->distance = -1;
+    new->locked = false;
+    new->reachable = false;
     ft_free_char_array(words);
     return new;
 }

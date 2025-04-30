@@ -17,6 +17,8 @@ typedef struct  s_map_node
     struct s_list   *       map_links_ll;
     bool start;
     bool end;
+    bool locked;
+    bool reachable;
     int distance;
 }               t_map_node;
 
