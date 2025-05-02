@@ -4,7 +4,17 @@
 #include "../inc/utils.h"
 #include <stdbool.h>
 
-void    remove_dead_ends(t_list ** head, int * room_amount)
+int    dead_end(t_map_node * room)
+{
+    if (room->start || room->end)
+        return 0;
+    else if (room->link_amount <= 1)
+        return 1;
+    else
+        return 0;
+}
+
+void    simp(t_list ** head, int * room_amount)
 {
     bool change = true;
 
@@ -17,17 +27,47 @@ void    remove_dead_ends(t_list ** head, int * room_amount)
         while (node)
         {
             t_map_node * room = node->content;
-            if (room->start || room->end);
-            else if (room->link_amount <= 1)
+            if (dead_end(room))
             {
                 change = true;
-                ft_printf("removing [%s] links: [%i]\n", room->name, room->link_amount);
                 remove_room_ll(head, room_amount, room->name);
                 node = prev->next;
                 continue;
             }
             prev = node;
             node = node->next;
+        }
+    }
+}
+
+int non_locked_links(t_map_node * room)
+{
+    int retval = 0;;
+    for (int i = 0; i < room->link_amount; ++i)
+        if (!room->map_links[i]->locked)
+            retval++;
+    return retval;
+}
+
+void    lock_dead_ends(t_map_node ** rooms, int room_amount)
+{
+    bool change = true;
+
+    while (change)
+    {
+        change = false;
+        for (int i = 0; i < room_amount; i++)
+        {
+            t_map_node * room = rooms[i];
+            if (room->end || room->start)
+                continue;
+            if (room->locked)
+                continue;
+            if (non_locked_links(room) < 2)
+            {
+                room->locked = true;
+                change = true;
+            }
         }
     }
 }
@@ -68,7 +108,7 @@ int remove_unreachable(t_list ** head, int * room_amount)
 int simplify(t_list * rooms, int * room_amount)
 {
     ft_printf("Initial rooms: %i\n", *room_amount);
-    remove_dead_ends(&rooms, room_amount);
+    simp(&rooms, room_amount);
     ft_printf("Removed dead ends: %i\n", *room_amount);
     remove_unreachable(&rooms,room_amount);
     ft_printf("Removed unreachable: %i\n", *room_amount);

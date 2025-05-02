@@ -59,6 +59,8 @@ t_map_node * get_cur_shortest(t_list ** paths, t_map_node * room)
     {
         if (room_in_any_path(*paths, room->map_links[i]))
             continue;
+        if (room->map_links[i]->locked)
+            continue;
         if (!current || room->map_links[i]->distance < current->distance)
             current = room->map_links[i];
     }
@@ -112,7 +114,7 @@ void    get_all_paths(t_list ** paths, t_map_node * start)
 
 }
 
-void    get_shortest_paths(t_list ** paths, t_map_node * start, int max_flow)
+void    get_shortest_paths(t_list ** paths, t_map_node * start, int max_flow, t_game_info * info)
 {
     for (int i = 0; i < max_flow; ++i)
     {
@@ -123,8 +125,17 @@ void    get_shortest_paths(t_list ** paths, t_map_node * start, int max_flow)
         while (!cur->end)
         {
             cur = get_cur_shortest(paths, cur);
+            if (!cur)
+            {
+                ft_lstclear(&new->path, NULL);
+                cur = start;
+                continue;
+            }
+            if (!cur->end && !cur->start)
+                cur->locked = true;
             ft_lstadd_back(&new->path, ft_lstnew(cur));
         }
+        lock_dead_ends(info->rooms,info->room_amount);
         ft_lstadd_back(paths, ft_lstnew(new));
     }
 }
@@ -139,8 +150,8 @@ int solve(t_game_info * info)
 
 
     t_list * paths = NULL;
-    get_all_paths(&paths, start);
-    /* get_shortest_paths(&paths, start, max_flow); */
+    /* get_all_paths(&paths, start); */
+    get_shortest_paths(&paths, start, max_flow, info);
 
     print_all_paths(paths);
     ft_lstclear(&paths, free_path);

@@ -11,6 +11,7 @@ typedef struct  s_path
 
 /* declarations */
 int solve(t_game_info * info);
+void    lock_dead_ends(t_map_node ** rooms, int room_amount);
 
 #endif /* MASTER_H */
 

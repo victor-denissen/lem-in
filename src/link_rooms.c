@@ -4,7 +4,7 @@
 
 int tmp(char * r_name, char * from, char * to, t_game_info * info, t_list **l)
 {
-    if (ft_strncmp(r_name, from, ft_strlen(r_name)) == 0)
+    if (ft_strcmp(r_name, from) == 0)
     {
         if (ft_strncmp(r_name, to, ft_strlen(r_name)) == 0)
             return  ft_putendl_fd("Cant link to self", 2), 1;
